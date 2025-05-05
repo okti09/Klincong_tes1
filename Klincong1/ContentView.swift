@@ -32,6 +32,7 @@ struct ContentView: View {
                     Text("Choose Your\n Cleaning Tools")
                         .font(.title) // Mengatur ukuran font untuk judul
                         .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
                         .fontWeight(.bold) // Memberikan ketebalan font
                         .padding(.top, 20) // Menambahkan jarak di atas teks
                     
