@@ -45,7 +45,6 @@ struct ContentView: View {
                   //  .frame(maxWidth: .infinity) // Grid terletak di tengah secara horizontal
                     .padding() // Memberikan sedikit padding di sekitar grid
                     
-                    
                     Button(action: {
                         navigateToTasks = true
                     }) {
@@ -69,7 +68,6 @@ struct ContentView: View {
             .padding()
             //.frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.hijaumalam))
-            
         }
     }
 
