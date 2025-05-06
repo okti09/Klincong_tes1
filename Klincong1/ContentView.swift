@@ -7,8 +7,16 @@
 
 import SwiftUI
 
+struct ToolItem: Identifiable, Hashable{
+    let id = UUID()
+    let icon: String // Nama gambar yang ada di asset
+    let name: String
+}
+
 struct ContentView: View {
     @State private var navigateToTasks = false
+    @State private var path: [Route] = []
+    @State private var image: UIImage?
     
     let selectedTools = [
         ("alat_Sapu", "Sapu"),
@@ -25,13 +33,13 @@ struct ContentView: View {
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
-      //  NavigationLink {
+        NavigationStack(path: $path) {
             ScrollView {
                 VStack {
                     // Menambahkan teks di atas grid
                     Text("Choose Your\n Cleaning Tools")
                         .font(.title) // Mengatur ukuran font untuk judul
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.black)
                         .multilineTextAlignment(.center)
                         .fontWeight(.bold) // Memberikan ketebalan font
                         .padding(.top, 20) // Menambahkan jarak di atas teks
@@ -43,34 +51,50 @@ struct ContentView: View {
                             
                         }
                     }
-                  //  .frame(maxWidth: .infinity) // Grid terletak di tengah secara horizontal
+                    //  .frame(maxWidth: .infinity) // Grid terletak di tengah secara horizontal
                     .padding() // Memberikan sedikit padding di sekitar grid
                     
                     Button(action: {
-                        navigateToTasks = true
+                        if selectedTools.count >= 1 {
+                           // saveToUserDefaults()
+                            path.append(.camera)
+                        }
+                        path.append(.camera)
                     }) {
-                     //   NavigationLink(destination: CardTaskView()) {
-                            Text("Done")
-                                .fontWeight(.bold)
-                                .padding()
-                                .frame(maxWidth: 220)
-                                .background(
-                                    LinearGradient( gradient: Gradient(colors: [Color.orange, Color.yellow]),
-                                                    startPoint: .leading,
-                                                    endPoint: .trailing )
-                                )
-                                .foregroundColor(.white)
-                                .cornerRadius(30)
+                        //   NavigationLink(destination: CardTaskView()) {
+                        Text("Done")
+                            .fontWeight(.bold)
+                            .padding()
+                            .disabled(selectedTools.count < 1)
+                            .frame(maxWidth: 220)
+                            .background(
+                                LinearGradient( gradient: Gradient(colors: [Color.orange, Color.yellow]),
+                                                startPoint: .leading,
+                                                endPoint: .trailing )
+                            )
+                            .foregroundColor(.white)
+                            .cornerRadius(30)
+                            .padding()
                         
+                    }
+                }
+                .navigationDestination(for: Route.self) { route in
+                    switch route {
+                    case .camera:
+                        CameraView { capturedImage in
+                            self.image = capturedImage
+                            path.removeLast()
                         }
                     }
                 }
-          //  }
-            .padding()
-            //.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.birumalam))
+                
+            }
         }
+        //.padding()
+        //.frame(maxWidth: .infinity, maxHeight: .infinity)
+        // .background(Color(.birumalam))
     }
+}
 
 #Preview {
     ContentView()
