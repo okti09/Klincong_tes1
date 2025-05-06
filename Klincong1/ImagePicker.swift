@@ -9,9 +9,17 @@ import Foundation
 import SwiftUI
 import UIKit
 
-struct ImagePicker: UIViewControllerRepresentable {
-    var sourceType: UIImagePickerController.SourceType = .camera
-    var onImagePicked: (UIImage) -> Void
+
+//
+//  CameraView.swift
+//  cleaningAsistant
+//
+//  Created by Asri Oktianawati on 06/05/25.
+//
+
+struct CameraView: UIViewControllerRepresentable {
+    var onCapture: (UIImage) -> Void
+    @Environment(\.dismiss) var dismiss
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -19,34 +27,73 @@ struct ImagePicker: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
-        picker.sourceType = sourceType
+        picker.sourceType = .camera
         picker.delegate = context.coordinator
-        picker.allowsEditing = false
         return picker
     }
 
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 
     class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: ImagePicker
+        let parent: CameraView
 
-        init(_ parent: ImagePicker) {
+        init(_ parent: CameraView) {
             self.parent = parent
         }
 
-        func imagePickerController(_ picker: UIImagePickerController,
-                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let image = info[.originalImage] as? UIImage {
-                parent.onImagePicked(image)
+                parent.onCapture(image)
             }
-            picker.dismiss(animated: true)
+            parent.dismiss()
         }
 
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            picker.dismiss(animated: true)
+            parent.dismiss()
         }
     }
 }
+
+
+//
+//struct ImagePicker: UIViewControllerRepresentable {
+//    var sourceType: UIImagePickerController.SourceType = .camera
+//    var onImagePicked: (UIImage) -> Void
+//
+//    func makeCoordinator() -> Coordinator {
+//        Coordinator(self)
+//    }
+//
+//    func makeUIViewController(context: Context) -> UIImagePickerController {
+//        let picker = UIImagePickerController()
+//        picker.sourceType = sourceType
+//        picker.delegate = context.coordinator
+//        picker.allowsEditing = false
+//        return picker
+//    }
+//
+//    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+//
+//    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+//        let parent: ImagePicker
+//
+//        init(_ parent: ImagePicker) {
+//            self.parent = parent
+//        }
+//
+//        func imagePickerController(_ picker: UIImagePickerController,
+//                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+//            if let image = info[.originalImage] as? UIImage {
+//                parent.onImagePicked(image)
+//            }
+//            picker.dismiss(animated: true)
+//        }
+//
+//        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+//            picker.dismiss(animated: true)
+//        }
+//    }
+//}
 
 
 //
