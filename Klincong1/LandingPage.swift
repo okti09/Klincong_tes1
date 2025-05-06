@@ -50,7 +50,7 @@ struct Landingpage: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.hijaumalam))
+            .background(Color(.birumalam))
             .edgesIgnoringSafeArea(.all)
         }
     }

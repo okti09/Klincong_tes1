@@ -39,16 +39,16 @@ struct CardTaskView: View {
                     Text(task.title)
                         .font(.title2)
                         .fontWeight(.bold)
-                        .foregroundColor(task.isCompleted ? .gray : .black)
+                        .foregroundColor(task.isCompleted ? .white : .black)
                     
                     Text(task.description)
                         .font(.subheadline)
-                        .foregroundColor(task.isCompleted ? .gray : .black)
-
+                        .foregroundColor(task.isCompleted ? .white : .black)
+                    
                 }
                 .padding()
                 .frame(width: 340, height: 100)
-                .background(task.isCompleted ? Color.gray.opacity(0.4) : Color.yellow.opacity(1))
+                .background(task.isCompleted ? Color.gray.opacity(0.5) : Color.yellow.opacity(1))
                 .cornerRadius(15)
                 .offset(x: task.offset.width, y: 0)
                 .gesture(
@@ -65,10 +65,42 @@ struct CardTaskView: View {
                 )
                 .animation(.easeInOut, value: task.offset)
             }
+            Spacer()
+            HStack(spacing: 20) {
+                Button(action: {
+                    print("Skip tapped")
+                }) {
+                    Text("Skip")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 12)
+                        .background(Color.orange)
+                        .cornerRadius(30)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 30)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                        )
+                }
+                
+                Button(action: {
+                    print("Finish tapped. Completed tasks: \(tasks.filter { $0.isCompleted })")
+                }) {
+                    Text("Finish")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 12)
+                        .background(Color.orange)
+                        .cornerRadius(30)
+                        .shadow(radius: 5)
+                }
+            }
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.hijaumalam))
+        .background(Color(.birumalam))
+        // .edgesIgnoringSafeArea(.all)
     }
 }
 
