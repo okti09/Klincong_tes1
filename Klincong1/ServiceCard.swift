@@ -1,9 +1,9 @@
-//
-//  ServiceCard.swift
-//  Klincong1
-//
-//  Created by Asri Oktianawati on 03/05/25.
-//
+////
+////  ServiceCard.swift
+////  Klincong1
+////
+////  Created by Asri Oktianawati on 03/05/25.
+////
 import Foundation
 import SwiftUI
 
@@ -23,7 +23,7 @@ struct ServiceCard: View {
 
             Text(label)
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(.black)
+                .foregroundColor(.gray)
            
         }
         .padding()

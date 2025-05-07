@@ -17,6 +17,9 @@ struct TaskCard: Identifiable {
 }
 
 struct CardTaskView: View {
+    let total: Double = 5.0 //harus disesuaikan dengan berapa banyak tasknya
+    @State private var progress: Double = 0.0
+    
     @State private var tasks: [TaskCard] = [
         TaskCard(title: "Membersihkan Kaca", description: "Gunakan kain lap dan cairan pembersih."),
         TaskCard(title: "Mengelap Meja", description: "Gunakan lap basah untuk meja."),
@@ -25,12 +28,27 @@ struct CardTaskView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            Text("This is your task")
+            Text("Here's your\n cleaning task")
                 .font(.largeTitle)
-                .foregroundColor(.white)
+                .foregroundColor(.gray)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
                 .padding()
+            
+            HStack {
+                ProgressView(value: progress, total: total)
+                    .progressViewStyle(LinearProgressViewStyle())
+                    .frame(height: 20)
+                    .accentColor(.yellow)
+                    .padding()
+                
+                
+                // Menampilkan angka di samping progress bar
+                Text("\(Int(progress))/\(Int(total))")
+                    .font(.headline)
+                    .padding()
+                
+            }
             
             ForEach(tasks.indices, id: \.self) { index in
                 let task = tasks[index]
@@ -84,7 +102,11 @@ struct CardTaskView: View {
                 }
                 
                 Button(action: {
-                    print("Finish tapped. Completed tasks: \(tasks.filter { $0.isCompleted })")
+                    withAnimation {
+                        if progress < total {
+                            progress += 1
+                        }
+                    }
                 }) {
                     Text("Finish")
                         .font(.headline)
@@ -93,13 +115,12 @@ struct CardTaskView: View {
                         .padding(.vertical, 12)
                         .background(Color.orange)
                         .cornerRadius(30)
-                        .shadow(radius: 5)
                 }
             }
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.birumalam))
+        //.background(Color(.birumalam))
         // .edgesIgnoringSafeArea(.all)
     }
 }

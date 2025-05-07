@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ToolItem: Identifiable, Hashable{
     let id = UUID()
-    let icon: String // Nama gambar yang ada di asset
+    let icon: String
     let name: String
 }
 
@@ -39,7 +39,7 @@ struct ContentView: View {
                     // Menambahkan teks di atas grid
                     Text("Choose Your\n Cleaning Tools")
                         .font(.title) // Mengatur ukuran font untuk judul
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.gray)
                         .multilineTextAlignment(.center)
                         .fontWeight(.bold) // Memberikan ketebalan font
                         .padding(.top, 20) // Menambahkan jarak di atas teks
@@ -51,17 +51,14 @@ struct ContentView: View {
                             
                         }
                     }
-                    //  .frame(maxWidth: .infinity) // Grid terletak di tengah secara horizontal
                     .padding() // Memberikan sedikit padding di sekitar grid
                     
                     Button(action: {
                         if selectedTools.count >= 1 {
-                           // saveToUserDefaults()
+                            // saveToUserDefaults()
                             path.append(.camera)
                         }
-                        path.append(.camera)
                     }) {
-                        //   NavigationLink(destination: CardTaskView()) {
                         Text("Done")
                             .fontWeight(.bold)
                             .padding()
@@ -72,29 +69,47 @@ struct ContentView: View {
                                                 startPoint: .leading,
                                                 endPoint: .trailing )
                             )
-                            .foregroundColor(.white)
+                            .foregroundColor(.gray)
                             .cornerRadius(30)
                             .padding()
-                        
                     }
                 }
                 .navigationDestination(for: Route.self) { route in
                     switch route {
                     case .camera:
-                        CameraView { capturedImage in
-                            self.image = capturedImage
-                            path.removeLast()
+                        ZStack {
+                            CameraView { capturedImage in
+                                self.image = capturedImage
+                                path.removeLast()
+                            }
+                            
+                            VStack {
+                                Spacer()
+                                Text("📸 Arahkan kamera ke alat yang dipilih lalu ambil gambar.")
+                                    .font(.headline)
+                                    .multilineTextAlignment(.center)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.black.opacity(0.6))
+                                    .cornerRadius(10)
+                                    .padding()
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .contentShape(Rectangle())
+                            }
                         }
+                        .navigationBarBackButtonHidden(true)
+                        
                     }
                 }
-                
             }
+            
         }
-        //.padding()
-        //.frame(maxWidth: .infinity, maxHeight: .infinity)
-        // .background(Color(.birumalam))
     }
+    //.padding()
+    //.frame(maxWidth: .infinity, maxHeight: .infinity)
+    // .background(Color(.birumalam))
 }
+
 
 #Preview {
     ContentView()

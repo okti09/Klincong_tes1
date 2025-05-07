@@ -14,7 +14,7 @@ struct Landingpage: View {
                 
                 Text("Let's Begin\n Your Cleaning")
                     .font(.largeTitle)
-                    .foregroundColor(.white)
+                    .foregroundColor(.gray)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                 //.padding()
@@ -46,6 +46,7 @@ struct Landingpage: View {
                             )
                             .foregroundColor(.white)
                             .cornerRadius(30)
+                            .navigationBarBackButtonHidden(true)
                     }
                 }
             }

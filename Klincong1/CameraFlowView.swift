@@ -10,6 +10,7 @@ import SwiftUI
 struct CameraContentView: View {
     @State private var image: UIImage?
     @State private var path: [Route] = []
+    @State private var showInstructions = false
     
     var body: some View {
         NavigationStack(path: $path) {
