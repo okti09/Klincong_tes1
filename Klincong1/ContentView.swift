@@ -22,6 +22,7 @@ struct ContentView: View {
     @State private var path: [MainRoute] = []
     @State private var image: UIImage?
     @State private var showInstructions = true
+
     let allTools: [(String, String)] = [
         ("alat_Sapu", "Sapu"),
         ("alat_Pel", "Pel"),
@@ -65,7 +66,6 @@ struct ContentView: View {
                     Button(action: {
                         if selectedTools.count >= 1 {
                             showInstructions = true
-                            print("Alat yang dipilih user:", selectedTools.map { $0.1 })
                             path.append(.camera)
                         }
                     }) {
@@ -86,12 +86,9 @@ struct ContentView: View {
                 .navigationDestination(for: MainRoute.self) { route in
                     switch route {
                     case .camera:
-                        CameraContentView(selectedTools: selectedTools.map { $0.1 }, onAnalyzeFinished: { taskGroups in
-                            print("Menambah .task ke path di ContentView")
-                            DispatchQueue.main.async {
-                                path.append(.task(taskGroups))
-                            }
-                        })
+                        CameraContentView(selectedTools: selectedTools.map { $0.1 }) { taskGroups in
+                            path.append(.task(taskGroups))
+                        }
                         .navigationBarBackButtonHidden(true)
                     case .task(let taskGroups):
                         CardTaskView(taskGroups: taskGroups)

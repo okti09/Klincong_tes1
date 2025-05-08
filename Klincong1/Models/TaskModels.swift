@@ -1,11 +1,10 @@
 import Foundation
 
-struct TaskItem: Identifiable, Codable, Hashable, Equatable {
+struct TaskItem: Hashable, Equatable, Identifiable {
     let id = UUID()
-    let description: String
+    var description: String
 }
 
-struct TaskGroup: Identifiable, Codable, Hashable, Equatable {
-    let id = UUID()
-    let tasks: [TaskItem]
+struct TaskGroup: Hashable, Equatable {
+    var tasks: [TaskItem]
 }

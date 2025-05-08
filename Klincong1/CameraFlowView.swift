@@ -64,12 +64,11 @@ struct CameraContentView: View {
                 let jsonString = extractJSON(from: response) ?? response
                 print("JSON yang akan di-parse:", jsonString)
                 if let data = jsonString.data(using: .utf8),
-                   let array = try? JSONSerialization.jsonObject(with: data) as? [[String: [String: String]]] {
-                    let taskGroups: [TaskGroup] = array.map { dict in
-                        let tasks: [TaskItem] = dict.values.map { taskDict in
-                            TaskItem(description: taskDict["description"] ?? "")
-                        }
-                        return TaskGroup(tasks: tasks)
+                   let array = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                    let taskGroups: [TaskGroup] = array.compactMap { dict in
+                        guard let tasks = dict["tasks"] as? [String] else { return nil }
+                        let items = tasks.map { TaskItem(description: $0) }
+                        return TaskGroup(tasks: items)
                     }
                     print("onAnalyzeFinished akan dipanggil")
                     onAnalyzeFinished(taskGroups)
