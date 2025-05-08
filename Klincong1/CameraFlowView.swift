@@ -12,33 +12,76 @@ struct CameraContentView: View {
     var onAnalyzeFinished: ([TaskGroup]) -> Void = { _ in }
     @State private var isLoading = false
     @State var errorMessage: String? = nil
-    @State private var shouldOpenCamera = true
+    @State private var shouldOpenCamera = false
 
     var body: some View {
-        VStack(spacing: 20) {
+        ZStack {
             if shouldOpenCamera {
                 CameraView { capturedImage in
                     shouldOpenCamera = false
                     analyzeAndNavigate(with: capturedImage)
                 }
-            } else if isLoading {
+                .ignoresSafeArea()
+            } else {
+                // CameraView sebagai background
+                CameraView { _ in }
+                    .ignoresSafeArea()
+                GeometryReader { geo in
+                    ZStack {
+                        // Blur full screen
+                        Color.clear.background(.ultraThinMaterial).ignoresSafeArea()
+                        VStack {
+                            Spacer()
+                            VStack(spacing: 24) {
+                                Text("Take photo of the spesific area to clean\n(Bed/Bathroom/Desk/Kitchen/Wardobe)")
+                                    .font(.title3)
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 24)
+                                HStack(spacing: 28) {
+                                    Image(systemName: "bed.double.fill").resizable().frame(width: 40, height: 32).foregroundColor(.white)
+                                    Image(systemName: "shower.fill").resizable().frame(width: 32, height: 32).foregroundColor(.white)
+                                    Image(systemName: "table.fill").resizable().frame(width: 40, height: 32).foregroundColor(.white)
+                                    Image(systemName: "fork.knife").resizable().frame(width: 36, height: 32).foregroundColor(.white)
+                                    Image(systemName: "sink.fill").resizable().frame(width: 36, height: 32).foregroundColor(.white)
+                                    Image(systemName: "cabinet.fill").resizable().frame(width: 32, height: 32).foregroundColor(.white)
+                                }
+                            }
+                            Spacer()
+                            Button(action: { shouldOpenCamera = true }) {
+                                Text("CAPTURE NOW")
+                                    .font(.system(size: 22, weight: .bold))
+                                    .foregroundColor(.black)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 18)
+                                    .background(Color.white)
+                                    .cornerRadius(32)
+                                    .padding(.horizontal, 32)
+                            }
+                            .padding(.bottom, geo.safeAreaInsets.bottom + 32)
+                        }
+                    }
+                }
+            }
+            if isLoading {
                 ProgressView("Analyzing...")
                     .font(.title2)
                     .padding()
             } else if let errorMessage = errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
+                VStack {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .padding()
+                    Button(action: {
+                        self.errorMessage = nil
+                        shouldOpenCamera = false
+                    }) {
+                        Text("Coba Lagi")
+                    }
                     .padding()
-                Button(action: {
-                    self.errorMessage = nil
-                    shouldOpenCamera = true
-                }) {
-                    Text("Coba Lagi")
                 }
-                .padding()
             }
         }
-        .padding()
     }
 
     // Fungsi untuk ekstrak JSON dari blok markdown
