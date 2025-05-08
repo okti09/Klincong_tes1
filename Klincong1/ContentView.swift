@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+enum MainRoute: Hashable {
+    case camera
+    case task([TaskGroup])
+}
+
 struct ToolItem: Identifiable, Hashable {
     let id = UUID()
     let icon: String
@@ -14,7 +19,7 @@ struct ToolItem: Identifiable, Hashable {
 }
 
 struct ContentView: View {
-    @State private var path: [Route] = []
+    @State private var path: [MainRoute] = []
     @State private var image: UIImage?
     @State private var showInstructions = true
 
@@ -70,24 +75,18 @@ struct ContentView: View {
                             .padding()
                     }
                 }
-                .navigationDestination(for: Route.self) { route in
+                .navigationDestination(for: MainRoute.self) { route in
                     switch route {
                     case .camera:
-                        ZStack {
-                            CameraView { capturedImage in
-                                self.image = capturedImage
-                                self.showInstructions = false
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    path.removeLast() // 2️⃣ Baru keluar dari kamera
-                                }
-                                //path.removeLast()
+                        CameraContentView(onAnalyzeFinished: { taskGroups in
+                            print("Menambah .task ke path di ContentView")
+                            DispatchQueue.main.async {
+                                path.append(.task(taskGroups))
                             }
-
-                            if showInstructions {
-                                InstructionOverlayView()
-                            }
-                        }
+                        })
                         .navigationBarBackButtonHidden(true)
+                    case .task(let taskGroups):
+                        CardTaskView(taskGroups: taskGroups)
                     }
                 }
             }

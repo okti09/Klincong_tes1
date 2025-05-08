@@ -43,7 +43,10 @@ struct CameraView: UIViewControllerRepresentable {
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let image = info[.originalImage] as? UIImage {
+                print("Image captured in CameraView")
                 parent.onCapture(image)
+            } else {
+                print("Failed to capture image")
             }
             parent.dismiss()
         }

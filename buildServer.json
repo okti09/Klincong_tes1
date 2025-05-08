@@ -1,0 +1,19 @@
+{
+	"name": "xcode build server",
+	"version": "0.2",
+	"bspVersion": "2.0",
+	"languages": [
+		"c",
+		"cpp",
+		"objective-c",
+		"objective-cpp",
+		"swift"
+	],
+	"argv": [
+		"/opt/homebrew/bin/xcode-build-server"
+	],
+	"workspace": "/Users/shafatiara/Downloads/Klincong_tes1/Klincong1.xcodeproj/project.xcworkspace",
+	"build_root": "/Users/shafatiara/Library/Developer/Xcode/DerivedData/Klincong1-flfycxutquxlnpgkabwbitrpvunl",
+	"scheme": "Klincong1",
+	"kind": "xcode"
+}
