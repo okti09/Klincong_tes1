@@ -22,8 +22,7 @@ struct ContentView: View {
     @State private var path: [MainRoute] = []
     @State private var image: UIImage?
     @State private var showInstructions = true
-
-    let selectedTools = [
+    let allTools: [(String, String)] = [
         ("alat_Sapu", "Sapu"),
         ("alat_Pel", "Pel"),
         ("alat_vakum", "Vakum"),
@@ -34,6 +33,7 @@ struct ContentView: View {
         ("alat_Trashbin", "Tempat Sampah"),
         ("alat_Spons", "Spons")
     ]
+    @State private var selectedTools: [(String, String)] = []
 
     let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
 
@@ -49,8 +49,15 @@ struct ContentView: View {
                         .padding(.top, 20)
 
                     LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(selectedTools, id: \.0) { tool in
-                            ServiceCard(imageName: tool.0, label: tool.1)
+                        ForEach(allTools, id: \.0) { tool in
+                            let isSelected = selectedTools.contains(where: { $0.0 == tool.0 })
+                            ServiceCard(imageName: tool.0, label: tool.1, isSelected: isSelected) {
+                                if isSelected {
+                                    selectedTools.removeAll(where: { $0.0 == tool.0 })
+                                } else {
+                                    selectedTools.append(tool)
+                                }
+                            }
                         }
                     }
                     .padding()
@@ -58,6 +65,7 @@ struct ContentView: View {
                     Button(action: {
                         if selectedTools.count >= 1 {
                             showInstructions = true
+                            print("Alat yang dipilih user:", selectedTools.map { $0.1 })
                             path.append(.camera)
                         }
                     }) {
@@ -78,7 +86,7 @@ struct ContentView: View {
                 .navigationDestination(for: MainRoute.self) { route in
                     switch route {
                     case .camera:
-                        CameraContentView(onAnalyzeFinished: { taskGroups in
+                        CameraContentView(selectedTools: selectedTools.map { $0.1 }, onAnalyzeFinished: { taskGroups in
                             print("Menambah .task ke path di ContentView")
                             DispatchQueue.main.async {
                                 path.append(.task(taskGroups))

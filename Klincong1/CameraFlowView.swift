@@ -8,6 +8,7 @@ import Foundation
 import SwiftUI
 
 struct CameraContentView: View {
+    var selectedTools: [String]
     var onAnalyzeFinished: ([TaskGroup]) -> Void = { _ in }
     @State private var isLoading = false
     @State var errorMessage: String? = nil
@@ -58,7 +59,7 @@ struct CameraContentView: View {
             let imageBase64 = image.jpegData(compressionQuality: 0.7)?.base64EncodedString() ?? ""
             let service = ChatGPTService()
             do {
-                let response = try await service.analyzeImage(imageBase64: imageBase64)
+                let response = try await service.analyzeImage(imageBase64: imageBase64, toolsList: selectedTools)
                 print("Response dari OpenAI:", response)
                 let jsonString = extractJSON(from: response) ?? response
                 print("JSON yang akan di-parse:", jsonString)
@@ -94,5 +95,5 @@ enum CameraFlowRoute: Hashable {
 }
 
 #Preview {
-    CameraContentView()
+    CameraContentView(selectedTools: [])
 }

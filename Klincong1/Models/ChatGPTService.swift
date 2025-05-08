@@ -87,21 +87,43 @@ class ChatGPTService {
         print("API Key:", Config.openAIAPIKey)
     }
     
-    func analyzeImage(imageBase64: String) async throws -> String {
+    func analyzeImage(imageBase64: String, toolsList: [String]) async throws -> String {
+        let toolsString = toolsList.joined(separator: ", ")
         let prompt = """
-        Analyze this image and provide a detailed list of cleaning tasks that need to be done. 
-        Break down the tasks into small, manageable groups of 3 tasks each. 
-        For each task, provide specific details about what needs to be cleaned and how.
-        Format the response as a JSON array of task groups, where each group contains exactly 3 tasks.
+        Create an ultra-detailed cleaning task list for this studio apartment image.
+        Rules:
+        - Create as many groups as needed (minimum 1 group)
+        - Each group must have exactly 3 tasks
+        - Each task must be ONE single action only
+        - NEVER combine actions in one task
+        - Break EVERY complex action into its smallest possible steps
+        - Start each task with a single action verb
+        - Prioritize urgent tasks
+        - Focus on one area per group
+        - Group similar tasks together
+        - ONLY use available cleaning tools: \(toolsString)
+        - If a task requires a tool that's not available, skip that task
+        
+        Image: [IMAGE]
+        
+        Return JSON format:
+        [
+            {"group": 1, "tasks": ["task1", "task2", "task3"]},
+            ... (add more groups as needed)
+        ]
         """
         
         let requestBody: [String: Any] = [
             "model": "gpt-4.1",
             "messages": [
                 [
+                    "role": "system",
+                    "content": "You are a cleaning task analyzer. Break EVERY task into its smallest possible single action. Never combine actions. Only use available tools."
+                ],
+                [
                     "role": "user",
                     "content": [
-                        ["type": "text", "text": prompt],
+                        ["type": "text", "text": prompt.replacingOccurrences(of: "[IMAGE]", with: "(image below)")],
                         [
                             "type": "image_url",
                             "image_url": [
