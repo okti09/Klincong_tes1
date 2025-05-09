@@ -12,8 +12,8 @@
 	"argv": [
 		"/opt/homebrew/bin/xcode-build-server"
 	],
-	"workspace": "/Users/shafatiara/Downloads/Klincong_tes1/Klincong1.xcodeproj/project.xcworkspace",
-	"build_root": "/Users/shafatiara/Library/Developer/Xcode/DerivedData/Klincong1-flfycxutquxlnpgkabwbitrpvunl",
+	"workspace": "/Users/shafatiara/Downloads/fix/Klincong_tes1/Klincong1.xcodeproj/project.xcworkspace",
+	"build_root": "/Users/shafatiara/Library/Developer/Xcode/DerivedData/Klincong1-djabjvwnryghgjgjarvzajnyprdw",
 	"scheme": "Klincong1",
 	"kind": "xcode"
 }
